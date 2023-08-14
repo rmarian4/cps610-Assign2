@@ -1,0 +1,76 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{{ url_for('home') }}">Home</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('products') }}">Products</a>
+          </li>
+  
+          {% if current_user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('baskets') }}">Baskets</a>
+          </li>
+          {% endif %}
+
+	  {% if current_user.is_authenticated and current_user.usergroup in [1, 2] %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('update_status') }}">Update Order Status</a>
+            </li>
+          {% endif %}
+
+          {% if current_user.is_authenticated %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="reportsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Reports
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="reportsDropdown">
+	        {% if current_user.is_authenticated and current_user.usergroup in [1, 2] %}
+              <li><a class="dropdown-item" href="{{ url_for('purchasereport') }}">Purchase Report</a></li>
+	      {% endif %}
+              <li><a class="dropdown-item" href="{{ url_for('all_items_in_stock') }}">Check Stock of Basket Items</a></li>
+            </ul>
+          </li>
+          {% endif %}
+
+          {% if current_user.is_authenticated and current_user.usergroup == 1%}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="auditsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Audits
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="auditsDropdown">
+              <li><a class="dropdown-item" href="{{ url_for('audits_logon') }}">Logon Audits</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('audits_employee') }}">Employee Audits</a></li>
+            </ul>
+          </li>
+          {% endif %}
+        </ul>
+
+
+        <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
+          {% if not current_user.is_authenticated  %}
+            <li><a class="nav-link" href="{{ url_for('registerShopper') }}">Register</a></li>
+          {% endif %}
+          {% if current_user.is_authenticated %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              {{ current_user.username }}
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="userDropdown">
+              <li><a class="dropdown-item" href="{{ url_for('profile') }}">Profile</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
